@@ -1,0 +1,13 @@
+
+.left {
+	border-color: black;
+	border-width: 3px;
+	padding: 7px;
+	background-color: #999999;
+	width: 200px;
+	margin: 8px;
+}
+
+.white {
+	color:  white;
+}

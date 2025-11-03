@@ -1,0 +1,20 @@
+
+.frame {
+	border-color: black;
+	padding: 17px;
+}
+
+.positive {
+	color:  green;
+	background-color: #bcf5bc;
+}
+
+.negative {
+	color: red;
+	background-color: #fcc2ce;
+}
+
+.important {
+	color: brown;
+	background-color: #fafad2;
+}

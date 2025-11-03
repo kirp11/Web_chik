@@ -1,0 +1,33 @@
+
+h1 {
+	color: red;
+}
+
+h2 {
+	color: green;
+}
+
+.red {
+	color: red;
+}
+
+.big {
+	font-size: 14;
+	font-weight: bold;
+}
+
+.blue {
+	color: blue;	
+}
+
+.brown {
+	color: brown;	
+}
+
+p{
+	font-family: Arial;
+}
+
+.italic {
+	font-style: italic;
+}
