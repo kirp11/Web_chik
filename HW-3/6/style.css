@@ -1,0 +1,39 @@
+.rect {
+	width: 100%;
+	height: 200px;
+	background-color: yellow;
+	padding-bottom: 50px;
+	}
+
+.rect-big {
+	width: 100%;
+	height: 300px;
+	background-color: yellow;
+	padding-bottom: 50px;
+	}
+	
+.rect-white {
+	width: 100%;
+	height: 250px;
+	background-color: white
+	}
+	
+.rect-green {
+	width: 100%;
+	height: 250px;
+	background-color: green;
+	padding-bottom: 50px;
+	}
+	
+.rect-red {
+	width: 100%;
+	height: 200px;
+	background-color: red;
+	padding-bottom: 50px;
+	}
+	
+.rect-black {
+	width: 100%;
+	height: 150px;
+	background-color: black
+	}
