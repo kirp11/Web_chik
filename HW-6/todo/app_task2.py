@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Union, Dict, Annotated
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Body, Query
 
 app = FastAPI()
 
@@ -16,19 +16,7 @@ app = FastAPI()
 # 3. Добавить фильтрацию GET /students?group=IVT-101 — фильтрация по группе.
 #
 
-STUDENTS = [
- {
-  "id": int,
-  "name": str,
-  "group": str,
-  "grades": [
-   {
-    "subject": str,
-    "value": int
-   }
-  ]
- }
-]
+STUDENTS = []
 NEXT_ID = 1
 
 
@@ -49,23 +37,19 @@ def get_student(student_id: int):
 
 
 @app.post("/students/{group}/{name}", status_code=status.HTTP_201_CREATED)
-def create_student(data: Dict[str, str|int]):
+def create_student(group: str, name: str, data: Dict[str, Union[str, int, list]] = Body(...)):
 
     global NEXT_ID
 
-    value = data.get("grades[value]")
-    if value <1 and value>5:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    grades = data.get("grades")
+    for grade in grades:
+        if grade.get("value")<1 or grade.get("value")>5:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT)
     new_student = {
-         "id": data.get("id"),
-          "name": data.get("name"),
-          "group": data.get("group"),
-          "grades": [
-           {
-            "subject": data.get("grades[subject]"),
-            "value": data.get("grades[value]"),
-           }
-          ]
+         "id": NEXT_ID,
+          "name": name,
+          "group": group,
+          "grades": grades
     }
     STUDENTS.append(new_student)
     NEXT_ID += 1
@@ -98,6 +82,32 @@ def delete_student(id: int):
 
 # 2. Добавить маршрут GET /students/{id}/avg-grade — вернуть средний балл.
 
+@app.get("/students/{id}/avg-grade")
+def get_student_avg_grade(student_id: int):
+    student = next((student for student in STUDENTS if student.get("id") == student_id), None)
+    if student is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    grades = student.get("grades")
+    summ = 0
+    n = 0
+    for grade in grades:
+        summ += grade.get("value")
+        n+=1
+    avg_grade = summ/n
 
+    return f"средний балл студента по предметам {avg_grade}"
 
 # 3. Добавить фильтрацию GET /students?group=IVT-101 — фильтрация по группе.
+
+@app.get("/students/")
+def get_group(group: str = Query(None, description="Фильтр по группе")):
+    if group:
+        group_students = []
+        for student in STUDENTS:
+            if student.get("group") == group:
+                group_students.append(student)
+
+        if not group_students:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Group not found")
+        return F"список студентов из группы {group}: {group_students}"
+    return STUDENTS
